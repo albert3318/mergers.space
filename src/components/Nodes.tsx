@@ -8,8 +8,9 @@ import {
   OutMode,
 } from "@tsparticles/engine";
 import { loadSlim } from "@tsparticles/slim"; // if you are going to use `loadSlim`, install the "@tsparticles/slim" package too.
+import React from "react";
 
-const Nodes = () => {
+const Nodes = React.memo(() => {
   const [init, setInit] = useState(false);
 
   // this should be run only once per application lifetime
@@ -85,6 +86,10 @@ const Nodes = () => {
           density: {
             enable: true,
           },
+          limit: {
+            mode: "wait",
+            value: 80,
+          },
           value: 80,
         },
         opacity: {
@@ -97,6 +102,9 @@ const Nodes = () => {
           value: { min: 1, max: 5 },
         },
       },
+      fullScreen: {
+        enable: false,
+      },
       detectRetina: true,
     }),
     [],
@@ -108,11 +116,14 @@ const Nodes = () => {
         id="tsparticles"
         particlesLoaded={particlesLoaded}
         options={options}
+        className="absolute h-[100vh] w-[100vw]"
       />
     );
   }
 
   return <></>;
-};
+});
+
+Nodes.displayName = "Nodes";
 
 export default Nodes;

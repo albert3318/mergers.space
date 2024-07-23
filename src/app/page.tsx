@@ -1,10 +1,9 @@
-import Nodes from "@/components/Nodes";
+import FirstView from "@/components/FirstView";
 
 export default function Home() {
   return (
-    
-    <main>
-      <Nodes></Nodes>
-    </main>
+      <main className="w-[100vw] overflow-hidden">
+        <FirstView></FirstView>
+      </main>
   )
 };
