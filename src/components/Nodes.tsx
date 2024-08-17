@@ -12,17 +12,21 @@ import React from "react";
 
 const Nodes = React.memo(() => {
   const [init, setInit] = useState(false);
+  const [dense, setDense] = useState(false);
 
   // this should be run only once per application lifetime
   useEffect(() => {
+    const handleResize = () => {
+      // Check the zoom level and update density
+      const zoomLevel = window.devicePixelRatio;
+      if (zoomLevel >= 1) setDense(true); // Toggle on density when zoomed in
+      else setDense(false); // Toggle off density when zoomed out
+    };
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    
     initParticlesEngine(async (engine) => {
-      // you can initiate the tsParticles instance (engine) here, adding custom shapes or presets
-      // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
-      // starting from v2 you can add only the features you need reducing the bundle size
-      //await loadAll(engine);
-      //await loadFull(engine);
       await loadSlim(engine);
-      //await loadBasic(engine);
     }).then(() => {
       setInit(true);
     });
@@ -43,11 +47,11 @@ const Nodes = React.memo(() => {
       interactivity: {
         events: {
           onClick: {
-            enable: true,
+            enable: false,
             mode: "push",
           },
           onHover: {
-            enable: true,
+            enable: false,
             mode: "grab",
           },
         },
@@ -58,7 +62,7 @@ const Nodes = React.memo(() => {
           grab: {
             distance: 200,
             duration: 0.4,
-          },
+          }
         },
       },
       particles: {
@@ -68,7 +72,7 @@ const Nodes = React.memo(() => {
         links: {
           color: "#ffffff",
           distance: 150,
-          enable: true,
+          enable: false,
           opacity: 0.5,
           width: 1,
         },
@@ -78,28 +82,28 @@ const Nodes = React.memo(() => {
           outModes: {
             default: OutMode.out,
           },
-          random: false,
-          speed: 3,
-          straight: false,
+          random: true,
+          speed: 2,
+          straight: true,
         },
         number: {
           density: {
-            enable: true,
+            enable: dense,
           },
           limit: {
             mode: "wait",
-            value: 80,
+            value: 250,
           },
-          value: 80,
+          value: 250,
         },
         opacity: {
-          value: 0.5,
+          value: 1,
         },
         shape: {
-          type: "circle",
+          type: "square",
         },
         size: {
-          value: { min: 1, max: 5 },
+          value: { min: 1, max: 2 },
         },
       },
       fullScreen: {
@@ -107,7 +111,7 @@ const Nodes = React.memo(() => {
       },
       detectRetina: true,
     }),
-    [],
+    [dense],
   );
 
   if (init) {
